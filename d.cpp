@@ -1,76 +1,107 @@
 #include<iostream>
-#include<iomanip>
+#include<conio.h>
 using namespace std;
-class Date
-{
-	 int day;
-	 int  month;
-	 int year;
-      public:
-         Date()
-{
-      day=1;
-      month=1;
-      year=2000;
-}
-void getDate()
-{
-   cout<<"day month year";
-   cin>>day>>month>>year;
-    if(day>31)
+class Date 
+{    
+    private:
+    int day;
+    int month;
+    int year;
+    public:
+    Date() 
+	{
+        day = 1;
+        month = 1;
+        year = 2000;
+    }
+    void getDate() 
+	{
+        cout <<"enter day"<<endl;
+        cin >>day;
+        cout<<"enter month"<<endl;
+        cin>>month;
+        cout<<"enter year"<<endl;
+        cin>>year;
+        if (day > 31 || month > 12) 
+		{
+            cout << "Invalid date";
+            exit(0);
+        }
+    }
+    void putDate()
     {
-     cout<<"invalid day";
-     }
-    else if(month>12)
-{
-     cout<<"invalid month";
-}}
-void putDate()
-{
-  cout<<"\nage is"<<year<<"years"<<month<<"month and"<<day<<"days";
-}
-
-Date ageCalculate(Date & dob,Date &cd);
+        cout<<day<<"/"<<month<<"/"<<year<<endl;
+	}
+    void finalDate() 
+	{
+        cout << "\n Age is " << year << " year " << month << " month and " << day << " days.";
+    }
+    Date difference(Date& date1, Date& date2);
+    void incrementDate(int days, int months);
 };
-Date Date::ageCalculate(Date &dob,Date &cd)
+Date Date::difference(Date& date1, Date& date2) 
 {
     Date cal;
-    int monthcode[12]={31,((dob.year%4==0&&dob.year%100!=0||dob.year%400==0||cd.year%      4==0&&cd.year%100!=0||cd.year%400==0)?29:28),31,30,31,30,31,31,30,31,30,31};
-if(dob.day>cd.day)
+    int calculation[24] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+	                    ||31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    if (date1.day > date2.day) 
+	{
+        date2.day = date2.day + calculation[date2.month - 2];
+        cal.day = date2.day - date1.day;
+        date2.month = date2.month - 1;
+    }
+    else
+        cal.day = date2.day - date1.day;
+
+    if (date1.month > date2.month) 
+	{
+        date2.month = date2.month + 12;
+        date2.year = date2.year - 1;
+        cal.month = date2.month - date1.month;
+    }
+    else
+        cal.month = date2.month - date1.month;
+
+    cal.year = date2.year - date1.year;
+    return cal;
+}
+void Date::incrementDate(int days, int months) 
 {
-    cd.day=cd.day+monthcode[cd.month-2];
-    cal.day=cd.day-dob.day;
-    cd.month=cd.month-1;
-} 
-else
+    day += days;
+    month += months;
+    while (month > 12) 
+	{
+        month -= 12;
+        year++;
+    }
+    int calculation[24] = { 31,28,31,30,31,30,31,31,30,31,30,31||31,29,31,30,31,30,31,31,30,31,30,31 };
+    while (day > calculation[month - 1]) 
+	{
+        day -= calculation[month - 1];
+        month++;
 
-    cal.day=cd.day-dob.day;
-    if(dob.month>cd.month)
-{ 
-    cd.month=cd.month=12;
-    cd.year=cd.year-1;
-    cal.month=cd.month=dob.month;
+        while (month > 12) 
+		{
+            month -= 12;
+            year++;
+        }
+    }
 }
- else
-
-
-  cal.month=cd.month-dob.month;
-  cal.year=cd.year-dob.year;
-  return cal;
-}
-int main()
+int main() 
 {
-   Date dob,td,cal;
-   cout<<"enter date of birth";
-   dob.getDate();
-   cout<<"enter current date";
-   td.getDate();
-   cal=dob.ageCalculate(dob,td);
-   cal.putDate();
+    Date date1, date2, calculate;
+    date1.getDate();
+    date1.putDate();
+    date2.getDate();
+    date2.putDate();
+    calculate = date1.difference(date1, date2);
+    calculate.finalDate();
+
+    calculate.incrementDate(1, 1);
+    cout << "\n After incrementing of day and month ";
+    calculate.finalDate();
+
+    
+    return 0;
 }
-
-
-
-
-
-   
